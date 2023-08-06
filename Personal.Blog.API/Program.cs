@@ -1,4 +1,6 @@
+using Personal.Blog.Application.Services;
 using Personal.Blog.Domain.ConfigModels;
+using Personal.Blog.Storage;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +13,10 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.Configure<BlogDbSettings>(
     builder.Configuration.GetSection("MongoSettings"));
+
+//DI
+builder.Services.AddScoped(typeof(IRepository<>), typeof(MongoRepository<>));
+builder.Services.AddScoped<IPostService, PostService>();
 
 
 var app = builder.Build();
