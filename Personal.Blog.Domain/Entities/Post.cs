@@ -3,7 +3,7 @@ using MongoDB.Bson;
 
 namespace Personal.Blog.Domain.Entities
 {
-    public class Posts
+    public class Post
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
