@@ -11,9 +11,9 @@ namespace Personal.Blog.Storage
 
         public MongoRepository(IOptions<BlogDbSettings> blogSettings)
         {
-            var client = new MongoClient(blogSettings.Value.ConnectionString);
+            var client = new MongoClient(blogSettings.Value.MongoConnection);
             var database = client.GetDatabase(blogSettings.Value.DatabaseName);
-            _collection = database.GetCollection<T>(blogSettings.Value.PostsCollectionName);
+            _collection = database.GetCollection<T>(blogSettings.Value.PostCollectionName);
         }
 
         public async Task InsertAsync(T entity)

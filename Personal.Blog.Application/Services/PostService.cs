@@ -16,6 +16,7 @@ namespace Personal.Blog.Application.Services
 
         public async Task InsertPostAsync(Post post)
         {
+            post.Id = Guid.NewGuid().ToString("N").Substring(0, 24);
             await _postRepository.InsertAsync(post);
         }
 
