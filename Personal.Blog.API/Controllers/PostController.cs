@@ -18,11 +18,11 @@ namespace Personal.Blog.API.Controllers
             _postService = postService;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreatePost([FromBody] Post post)
+        [HttpGet]
+        public async Task<IActionResult> GetAllPosts()
         {
-            await _postService.InsertPostAsync(post);
-            return CreatedAtAction(nameof(GetPostById), new { id = post.Id }, post);
+            var posts = await _postService.GetAllPostsAsync();
+            return Ok(posts);
         }
 
         [HttpGet("{id}")]
@@ -38,12 +38,21 @@ namespace Personal.Blog.API.Controllers
             return Ok(post);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllPosts()
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchPosts([FromQuery] string query)
         {
-            var posts = await _postService.GetAllPostsAsync();
-            return Ok(posts);
+            // Implement search logic using the query parameter
+            var filteredPosts = await _postService.GetPostsAsync(p => p.Title.Contains(query) || p.Content.Contains(query));
+            return Ok(filteredPosts);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> CreatePost([FromBody] Post post)
+        {
+            await _postService.InsertPostAsync(post);
+            return CreatedAtAction(nameof(GetPostById), new { id = post.Id }, post);
+        }
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdatePost(string id, [FromBody] Post post)
@@ -73,13 +82,7 @@ namespace Personal.Blog.API.Controllers
             return NoContent();
         }
 
-        [HttpGet("search")]
-        public async Task<IActionResult> SearchPosts([FromQuery] string query)
-        {
-            // Implement search logic using the query parameter
-            var filteredPosts = await _postService.GetPostsAsync(p => p.Title.Contains(query) || p.Content.Contains(query));
-            return Ok(filteredPosts);
-        }
+
     }
 
 }
