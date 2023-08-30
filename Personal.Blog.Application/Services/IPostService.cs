@@ -7,7 +7,7 @@ namespace Personal.Blog.Application.Services
     public interface IPostService
     {
         Task InsertPostAsync(Post post);
-        Task UpdatePostAsync(Post post);
+        Task UpdatePostAsync(ObjectId postId, Post post);
         Task DeletePostAsync(ObjectId postId);
         Task<Post> GetPostByIdAsync(ObjectId postId);
         Task<IEnumerable<Post>> GetAllPostsAsync();

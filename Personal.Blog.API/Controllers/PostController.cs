@@ -70,7 +70,7 @@ namespace Personal.Blog.API.Controllers
             existingPost.Title = post.Title;
             existingPost.Content = post.Content;
 
-            await _postService.UpdatePostAsync(existingPost);
+            await _postService.UpdatePostAsync(postId, existingPost);
 
             return NoContent();
         }

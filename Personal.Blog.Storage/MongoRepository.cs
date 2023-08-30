@@ -21,9 +21,9 @@ namespace Personal.Blog.Storage
             await _collection.InsertOneAsync(entity);
         }
 
-        public async Task UpdateAsync(T entity)
+        public async Task UpdateAsync(object id, T entity)
         {
-            var filter = Builders<T>.Filter.Eq("_id", GetId(entity));
+            var filter = Builders<T>.Filter.Eq("_id", id);
             await _collection.ReplaceOneAsync(filter, entity);
         }
 

@@ -20,9 +20,9 @@ namespace Personal.Blog.Application.Services
             await _postRepository.InsertAsync(post);
         }
 
-        public async Task UpdatePostAsync(Post post)
+        public async Task UpdatePostAsync(ObjectId postId, Post post)
         {
-            await _postRepository.UpdateAsync(post);
+            await _postRepository.UpdateAsync(postId, post);
         }
 
         public async Task DeletePostAsync(ObjectId postId)
