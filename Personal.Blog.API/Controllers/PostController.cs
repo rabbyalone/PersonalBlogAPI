@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 using Personal.Blog.Application.Services;
 using Personal.Blog.Domain.Entities;
+using System.Text.Json;
 
 namespace Personal.Blog.API.Controllers
 {
@@ -49,6 +50,8 @@ namespace Personal.Blog.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreatePost([FromBody] Post post)
         {
+            string c = JsonSerializer.Serialize(post.Content);
+            post.Content = c;
             await _postService.InsertPostAsync(post);
             return CreatedAtAction(nameof(GetPostById), new { id = post.Id }, post);
         }

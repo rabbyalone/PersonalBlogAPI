@@ -41,7 +41,9 @@ namespace Personal.Blog.Application.Services
 
         public async Task<IEnumerable<Post>> GetAllPostsAsync()
         {
-            return await _postRepository.GetAllAsync();
+            var posts = await _postRepository.GetAllAsync();
+            posts.ToList().ForEach(a => a.Slug = a.Id);
+            return posts;
         }
 
         public async Task<IEnumerable<Post>> GetPostsAsync(Expression<Func<Post, bool>> filter)

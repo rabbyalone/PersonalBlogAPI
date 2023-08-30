@@ -49,6 +49,12 @@ namespace Personal.Blog.Storage
             return await _collection.Find(_ => true).ToListAsync();
         }
 
+        public async Task<IEnumerable<T>> GetRecentPostAsync()
+        {
+            //var filter = Builders<T>.sor;
+            return await _collection.Find(_ => true).ToListAsync();
+        }
+
         public async Task<IEnumerable<T>> GetAsync(Expression<Func<T, bool>> filter)
         {
             return await _collection.Find(filter).ToListAsync();
