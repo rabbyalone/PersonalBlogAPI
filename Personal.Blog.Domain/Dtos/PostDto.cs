@@ -8,7 +8,7 @@
 
         public string? Slug { get; set; }
 
-        public DateTime? CreateDate { get; set; }
+        public DateTime? CreateDate { get; set; } = DateTime.UtcNow;
         public DateTime? ModifiedDate { get; set; }
         public string? Layout { get; set; }
         public string? Bibliography { get; set; }

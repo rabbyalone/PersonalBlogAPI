@@ -22,6 +22,7 @@ namespace Personal.Blog.Application.Services
 
         public async Task UpdatePostAsync(ObjectId postId, Post post)
         {
+            post.ModifiedDate = DateTime.UtcNow;
             await _postRepository.UpdateAsync(postId, post);
         }
 
@@ -42,7 +43,7 @@ namespace Personal.Blog.Application.Services
         public async Task<IEnumerable<Post>> GetAllPostsAsync()
         {
             var posts = await _postRepository.GetAllAsync();
-            posts.ToList().ForEach(a => a.Slug = a.Id);
+            posts.OrderByDescending(a => a.CreateDate).ToList().ForEach(a => a.Slug = a.Id);
             return posts;
         }
 

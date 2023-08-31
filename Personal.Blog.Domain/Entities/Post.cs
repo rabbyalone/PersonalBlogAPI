@@ -17,7 +17,7 @@ namespace Personal.Blog.Domain.Entities
         public DateTime? ModifiedDate { get; set; }
         public string? Layout { get; set; }
         public string? Bibliography { get; set; }
-        public bool IsDraft { get; set; }
+        public bool? IsDraft { get; set; } = false;
         public List<string> Tags { get; set; } = null!;
         public string Author { get; set; } = null!;
         public string Content { get; set; } = null!;
