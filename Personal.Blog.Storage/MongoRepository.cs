@@ -68,5 +68,26 @@ namespace Personal.Blog.Storage
 
             return property.GetValue(entity);
         }
+
+        public async Task<IEnumerable<string>> GetListProperty<TResult>(Expression<Func<T, IEnumerable<TResult>>> listPropertySelector, Expression<Func<T, bool>> filter)
+        {
+            var lst = await _collection.Find(filter).Project(listPropertySelector).ToListAsync();
+            List<string> result = new List<string>();
+            foreach (var item in lst)
+            {
+                foreach (var item2 in item)
+                {
+                    if (item2 is null) continue;
+
+                    if (!result.Contains(item2.ToString()))
+                    {
+                        result.Add(item2.ToString());
+                    }
+                }
+            }
+
+            return result;
+
+        }
     }
 }

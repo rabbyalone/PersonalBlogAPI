@@ -51,6 +51,15 @@ namespace Personal.Blog.Application.Services
         {
             return await _postRepository.GetAsync(filter);
         }
+
+        public async Task<IEnumerable<string>> GetTagsAsync()
+        {
+            Expression<Func<Post, bool>> filter = u => u.Tags.Any();
+            Expression<Func<Post, IEnumerable<string>>> listPropertySelector = u => u.Tags;
+
+            var selectedTagsLists = await _postRepository.GetListProperty(listPropertySelector, filter);
+            return selectedTagsLists;
+        }
     }
 
 }

@@ -12,6 +12,7 @@ namespace Personal.Blog.Application.Services
         Task<Post> GetPostByIdAsync(ObjectId postId);
         Task<IEnumerable<Post>> GetAllPostsAsync();
         Task<IEnumerable<Post>> GetPostsAsync(Expression<Func<Post, bool>> filter);
+        Task<IEnumerable<string>> GetTagsAsync();
     }
 
 }

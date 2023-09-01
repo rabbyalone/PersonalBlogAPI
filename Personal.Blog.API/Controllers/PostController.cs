@@ -46,6 +46,13 @@ namespace Personal.Blog.API.Controllers
             return Ok(filteredPosts);
         }
 
+        [HttpGet("tags")]
+        public async Task<IActionResult> GetTags()
+        {
+            var tags = await _postService.GetTagsAsync();
+            return Ok(tags);
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreatePost([FromBody] Post post)
         {
