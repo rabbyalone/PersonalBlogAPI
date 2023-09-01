@@ -31,13 +31,27 @@ namespace Personal.Blog.Application.Services
             return await _postRepository.GetAsync(filter);
         }
 
-        public async Task<IEnumerable<string>> GetTagsAsync()
+        public async Task<Dictionary<string, int>> GetTagsAsync()
         {
             Expression<Func<Post, bool>> filter = u => u.Tags.Any();
             Expression<Func<Post, IEnumerable<string>>> listPropertySelector = u => u.Tags;
 
             var selectedTagsLists = await _postRepository.GetListProperty(listPropertySelector, filter);
-            return selectedTagsLists;
+            Dictionary<string, int> result = new();
+            foreach (var item in selectedTagsLists)
+            {
+                foreach (var item2 in item)
+                {
+                    if (item2 is null) continue;
+
+                    if (!result.Keys.Contains(item2.ToString()))
+                    {
+                        var tagCount = selectedTagsLists.Count(a => a.Contains(item2));
+                        result.Add(item2.ToString(), tagCount);
+                    }
+                }
+            }
+            return result;
         }
 
         public async Task InsertPostAsync(Post post)
