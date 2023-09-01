@@ -41,10 +41,17 @@ namespace Personal.Blog.API.Controllers
         [HttpGet("search")]
         public async Task<IActionResult> SearchPosts([FromQuery] string query)
         {
-            // Implement search logic using the query parameter
             var filteredPosts = await _postService.GetPostsAsync(p => p.Title.Contains(query) || p.Content.Contains(query));
             return Ok(filteredPosts);
         }
+
+        [HttpGet("postbytag")]
+        public async Task<IActionResult> TaggedPosts([FromQuery] string tag)
+        {
+            var filteredPosts = await _postService.GetPostsAsync(p => p.Tags.Contains(tag));
+            return Ok(filteredPosts);
+        }
+
 
         [HttpGet("tags")]
         public async Task<IActionResult> GetTags()
