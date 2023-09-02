@@ -12,8 +12,9 @@ namespace Personal.Blog.Domain.Entities
         public string? Summary { get; set; }
 
         public string? Slug { get; set; }
+        public string? Path { get; set; }
 
-        public DateTime? CreateDate { get; set; }
+        public DateTime? CreateDate { get; set; } = DateTime.UtcNow;
         public DateTime? ModifiedDate { get; set; }
         public string? Layout { get; set; }
         public string? Bibliography { get; set; }
@@ -21,6 +22,13 @@ namespace Personal.Blog.Domain.Entities
         public List<string> Tags { get; set; } = null!;
         public string Author { get; set; } = null!;
         public string Content { get; set; } = null!;
+
+        private void SetPath()
+        {
+            if (Id is not null)
+                Path = Id;
+        }
+
     }
 }
 
