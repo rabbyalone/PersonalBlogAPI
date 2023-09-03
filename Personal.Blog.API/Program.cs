@@ -20,7 +20,10 @@ builder.Services.Configure<BlogDbSettings>(
 //DI
 builder.Services.AddScoped(typeof(IRepository<>), typeof(MongoRepository<>));
 builder.Services.AddScoped<IPostService, PostService>();
+builder.Services.AddScoped<ICacheService, CacheService>();
 
+// Caching
+builder.Services.AddMemoryCache();
 
 // Add JWT authentication
 var jwtSecretKey = "your-secret-key"; // Replace with your actual secret key
