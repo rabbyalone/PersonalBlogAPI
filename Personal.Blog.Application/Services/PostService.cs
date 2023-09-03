@@ -57,12 +57,14 @@ namespace Personal.Blog.Application.Services
         public async Task InsertPostAsync(Post post)
         {
             post.Id = Guid.NewGuid().ToString("N").Substring(0, 24);
+            post.Tags = new List<string>(post.Tags.ConvertAll(a => a.ToLower()));
             await _postRepository.InsertAsync(post);
         }
 
         public async Task UpdatePostAsync(ObjectId postId, Post post)
         {
             post.ModifiedDate = DateTime.UtcNow;
+            post.Tags = new List<string>(post.Tags.ConvertAll(a => a.ToLower()));
             await _postRepository.UpdateAsync(postId, post);
         }
 

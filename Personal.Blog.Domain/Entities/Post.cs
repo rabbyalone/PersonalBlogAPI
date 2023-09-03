@@ -22,13 +22,6 @@ namespace Personal.Blog.Domain.Entities
         public List<string> Tags { get; set; } = null!;
         public string Author { get; set; } = null!;
         public string Content { get; set; } = null!;
-
-        private void SetPath()
-        {
-            if (Id is not null)
-                Path = Id;
-        }
-
     }
 }
 
