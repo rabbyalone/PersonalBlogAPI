@@ -75,5 +75,15 @@ namespace Personal.Blog.Storage
             return list;
 
         }
+
+        public async Task<IEnumerable<T>> GetSelectedPropertiesAsync(Expression<Func<T, bool>> filter, Expression<Func<T, T>> projection)
+        {
+            var cursor = await _collection.FindAsync(filter, new FindOptions<T, T>
+            {
+                Projection = Builders<T>.Projection.Expression(projection)
+            });
+
+            return await cursor.ToListAsync();
+        }
     }
 }

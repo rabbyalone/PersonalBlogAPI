@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson;
+using MongoDB.Driver;
 using Personal.Blog.Domain.Entities;
 using Personal.Blog.Storage;
 using System.Linq.Expressions;
@@ -28,6 +29,7 @@ namespace Personal.Blog.Application.Services
 
         public async Task<IEnumerable<Post>> GetPostsAsync(Expression<Func<Post, bool>> filter)
         {
+
             return await _postRepository.GetAsync(filter);
         }
 
@@ -52,6 +54,28 @@ namespace Personal.Blog.Application.Services
                 }
             }
             return result;
+        }
+
+        public async Task<IEnumerable<Post>> GetAllPostsSummary()
+        {
+            //var filter = Builders<Post>.Filter.Exists(doc => doc.Summary, true);
+
+            Expression<Func<Post, bool>> filter = f => f.IsDraft == false;
+
+            // Define a projection expression to select specific properties
+            Expression<Func<Post, Post>> projection = doc =>
+                new Post
+                {
+                    Summary = doc.Summary,
+                    Title = doc.Title,
+                    Id = doc.Id,
+                    Tags = doc.Tags,
+                    CreateDate = doc.CreateDate,
+                    ModifiedDate = doc.ModifiedDate,
+                };
+
+            var posts = await _postRepository.GetSelectedPropertiesAsync(filter, projection);
+            return posts;
         }
 
         public async Task InsertPostAsync(Post post)

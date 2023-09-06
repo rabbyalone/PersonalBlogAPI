@@ -26,8 +26,8 @@ namespace Personal.Blog.API.Controllers
 
             var cachedPosts = await _cacheService.GetOrSetAsync(
                     "all_posts",
-                     () => _postService.GetAllPostsAsync(),
-                    TimeSpan.FromMinutes(10)
+                     () => _postService.GetAllPostsSummary(),
+                    TimeSpan.FromDays(30)
 );
 
             if (cachedPosts == null || !cachedPosts.Any())
@@ -68,13 +68,7 @@ namespace Personal.Blog.API.Controllers
         [HttpGet("postbytag")]
         public async Task<IActionResult> TaggedPosts([FromQuery] string tag)
         {
-            string query = string.Empty;
-            if (tag.IndexOf('-') > -1)
-                query = tag.Replace('-', ' ').ToLower();
-            else
-                query = tag.ToLower();
-
-            var filteredPosts = await _postService.GetPostsAsync(p => p.Tags.Contains(query));
+            var filteredPosts = await _postService.GetPostsAsync(p => p.Tags.Contains(tag));
             return Ok(filteredPosts);
         }
 

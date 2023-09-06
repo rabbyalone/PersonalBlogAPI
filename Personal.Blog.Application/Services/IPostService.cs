@@ -13,6 +13,7 @@ namespace Personal.Blog.Application.Services
         Task<IEnumerable<Post>> GetAllPostsAsync();
         Task<IEnumerable<Post>> GetPostsAsync(Expression<Func<Post, bool>> filter);
         Task<Dictionary<string, int>> GetTagsAsync();
+        Task<IEnumerable<Post>> GetAllPostsSummary();
     }
 
 }
