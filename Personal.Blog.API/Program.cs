@@ -21,6 +21,7 @@ builder.Services.Configure<BlogDbSettings>(
 builder.Services.AddScoped(typeof(IRepository<>), typeof(MongoRepository<>));
 builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped<ICacheService, CacheService>();
+builder.Services.AddHostedService<ApiCallerHostedService>();
 
 // Caching
 builder.Services.AddMemoryCache();

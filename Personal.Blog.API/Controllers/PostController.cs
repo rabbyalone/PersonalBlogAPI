@@ -129,6 +129,12 @@ namespace Personal.Blog.API.Controllers
             return NoContent();
         }
 
+        [HttpGet("check")]
+        public async Task<IActionResult> Check()
+        {
+            return Ok("Check Success");
+        }
+
 
     }
 
