@@ -3,6 +3,8 @@ using Microsoft.Extensions.Logging;
 
 namespace Personal.Blog.Application.Services
 {
+    // This hosted service is optional,as i am using azure web apps free version, It is not always on, it goes idle in every 20 min, 
+    // To keep my azure web app always on, i have created this service which will fetch a blank api call in every 18 min to keep web apps always on
     public class ApiCallerHostedService : IHostedService, IDisposable
     {
         private readonly ILogger<ApiCallerHostedService> _logger;

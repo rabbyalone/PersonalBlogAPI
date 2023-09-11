@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Personal.Blog.Application.Services;
 using Personal.Blog.Domain.ConfigModels;
@@ -17,17 +18,25 @@ builder.Services.AddSwaggerGen();
 builder.Services.Configure<BlogDbSettings>(
     builder.Configuration.GetSection("MongoSettings"));
 
+builder.Services.Configure<JwtSettings>(
+    builder.Configuration.GetSection("JwtSettings"));
+
+
+
 //DI
+builder.Services.AddSingleton(sp => sp.GetRequiredService<IOptions<JwtSettings>>().Value);
+
 builder.Services.AddScoped(typeof(IRepository<>), typeof(MongoRepository<>));
 builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped<ICacheService, CacheService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddHostedService<ApiCallerHostedService>();
 
 // Caching
 builder.Services.AddMemoryCache();
-
 // Add JWT authentication
-var jwtSecretKey = "your-secret-key"; // Replace with your actual secret key
+var settings = builder.Configuration.GetSection("JwtSettings");
+var jwtSecretKey = settings.GetValue<string>("SecretKey"); // Replace with your actual secret key
 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecretKey));
 
 builder.Services.AddAuthentication(options =>
@@ -43,8 +52,8 @@ builder.Services.AddAuthentication(options =>
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = "your-issuer", // Replace with your actual issuer
-            ValidAudience = "your-audience", // Replace with your actual audience
+            ValidIssuer = settings.GetValue<string>("Issuer"), // Replace with your actual issuer
+            ValidAudience = settings.GetValue<string>("Audience"), // Replace with your actual audience
             IssuerSigningKey = key
         };
     });
@@ -55,7 +64,7 @@ builder.Services.AddCors(options =>
     options.AddDefaultPolicy(
         builder =>
         {
-            builder.WithOrigins("*").AllowAnyOrigin()
+            builder.WithOrigins("*.rabbyhasan.com.bd").AllowAnyOrigin()
                    .AllowAnyMethod()
                    .AllowAnyHeader();
         });

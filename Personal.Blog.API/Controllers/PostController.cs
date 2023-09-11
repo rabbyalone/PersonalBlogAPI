@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 using Personal.Blog.Application.Services;
@@ -89,7 +90,7 @@ namespace Personal.Blog.API.Controllers
 
             return Ok(cachedTags);
         }
-
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreatePost([FromBody] Post post)
         {
@@ -99,7 +100,7 @@ namespace Personal.Blog.API.Controllers
             return CreatedAtAction(nameof(GetPostById), new { id = post.Id }, post);
         }
 
-
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdatePost(string id, [FromBody] Post post)
         {
@@ -118,6 +119,7 @@ namespace Personal.Blog.API.Controllers
             return NoContent();
         }
 
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePost(string id)
         {
