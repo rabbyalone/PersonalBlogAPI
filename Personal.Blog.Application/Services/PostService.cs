@@ -75,7 +75,7 @@ namespace Personal.Blog.Application.Services
                 };
 
             var posts = await _postRepository.GetSelectedPropertiesAsync(filter, projection);
-            return posts;
+            return posts.OrderByDescending(a => a.CreateDate);
         }
 
         public async Task InsertPostAsync(Post post)
