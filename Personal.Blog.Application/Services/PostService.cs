@@ -24,12 +24,35 @@ namespace Personal.Blog.Application.Services
 
         public async Task<Post> GetPostByIdAsync(ObjectId postId)
         {
-            return await _postRepository.GetByIdAsync(postId);
+            var post = await _postRepository.GetByIdAsync(postId);
+            var posts = await GetAllPostsSummary();
+            var currentPostIndex = posts.ToList().FindIndex(a => a.Id == post.Id);
+            int previousIndex = currentPostIndex - 1;
+            int nextIndex = currentPostIndex + 1;
+
+            if (currentPostIndex > 0)
+            {
+                post.Previous = new PrevNext
+                {
+                    Title = posts.ElementAt(previousIndex).Title ?? "",
+                    Id = posts.ElementAt(previousIndex).Id ?? "",
+                };
+            }
+
+            if (nextIndex < posts.Count())
+            {
+                post.Next = new PrevNext
+                {
+                    Title = posts.ElementAt(nextIndex).Title ?? "",
+                    Id = posts.ElementAt(nextIndex).Id ?? "",
+                };
+            }
+
+            return post;
         }
 
         public async Task<IEnumerable<Post>> GetPostsAsync(Expression<Func<Post, bool>> filter)
         {
-
             return await _postRepository.GetAsync(filter);
         }
 
@@ -58,11 +81,8 @@ namespace Personal.Blog.Application.Services
 
         public async Task<IEnumerable<Post>> GetAllPostsSummary()
         {
-            //var filter = Builders<Post>.Filter.Exists(doc => doc.Summary, true);
-
             Expression<Func<Post, bool>> filter = f => f.IsDraft == false;
 
-            // Define a projection expression to select specific properties
             Expression<Func<Post, Post>> projection = doc =>
                 new Post
                 {

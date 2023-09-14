@@ -130,6 +130,7 @@ namespace Personal.Blog.API.Controllers
 
             await _postService.DeletePostAsync(postId);
             await _cacheService.DeleteAsync($"post{postId}");
+            await _cacheService.DeleteAsync("all_posts");
             return NoContent();
         }
 
