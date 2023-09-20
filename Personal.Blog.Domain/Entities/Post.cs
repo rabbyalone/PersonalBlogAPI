@@ -21,8 +21,8 @@ namespace Personal.Blog.Domain.Entities
         public bool? IsDraft { get; set; } = false;
         public List<string> Tags { get; set; } = null!;
         public string Author { get; set; } = null!;
-        public PrevNext Previous { get; set; } = new PrevNext();
-        public PrevNext Next { get; set; } = new PrevNext();
+        public PrevNext? Previous { get; set; }
+        public PrevNext? Next { get; set; }
         public string Content { get; set; } = null!;
     }
 
