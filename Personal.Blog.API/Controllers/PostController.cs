@@ -69,7 +69,9 @@ namespace Personal.Blog.API.Controllers
         [HttpGet("postbytag")]
         public async Task<IActionResult> TaggedPosts([FromQuery] string tag)
         {
-            var filteredPosts = await _postService.GetPostsAsync(p => p.Tags.Contains(tag));
+            string modifiedTag = tag.ToLower() == "c" ? "c#" : tag;
+
+            var filteredPosts = await _postService.GetPostsAsync(p => p.Tags.Contains(modifiedTag));
             return Ok(filteredPosts);
         }
 
