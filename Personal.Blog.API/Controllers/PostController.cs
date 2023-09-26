@@ -116,6 +116,10 @@ namespace Personal.Blog.API.Controllers
 
             existingPost.Title = post.Title;
             existingPost.Content = post.Content;
+            existingPost.Tags = post.Tags;
+            existingPost.Summary = post.Summary;
+            existingPost.Layout = post.Layout;
+            existingPost.IsDraft = post.IsDraft;
 
             await _postService.UpdatePostAsync(postId, existingPost);
             await _cacheService.CreateOrUpdateAsync($"post{post.Id}", post, TimeSpan.FromMinutes(10));
