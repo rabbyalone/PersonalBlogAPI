@@ -27,7 +27,7 @@ namespace Personal.Blog.API.Controllers
 
             var cachedPosts = await _cacheService.GetOrSetAsync(
                     "all_posts",
-                     () => _postService.GetAllPostsSummary(),
+                     () => _postService.GetAllPostsSummary(false),
                     TimeSpan.FromDays(30)
 );
 
@@ -37,6 +37,13 @@ namespace Personal.Blog.API.Controllers
             }
 
             return Ok(cachedPosts);
+        }
+
+        [HttpGet("drafts")]
+        public async Task<IActionResult> GetAllDraftPosts()
+        {
+            var drafts = await _postService.GetAllPostsSummary(true);
+            return Ok(drafts);
         }
 
         [HttpGet("{id}")]
@@ -71,7 +78,7 @@ namespace Personal.Blog.API.Controllers
         {
             string modifiedTag = tag.ToLower() == "c" ? "c#" : tag;
 
-            var filteredPosts = await _postService.GetPostsAsync(p => p.Tags.Contains(modifiedTag));
+            var filteredPosts = await _postService.GetPostsAsync(p => p.Tags.Contains(modifiedTag) && p.IsDraft == false);
             return Ok(filteredPosts);
         }
 

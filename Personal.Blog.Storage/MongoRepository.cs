@@ -46,7 +46,8 @@ namespace Personal.Blog.Storage
 
         public async Task<IEnumerable<T>> GetAllAsync()
         {
-            return await _collection.Find(_ => true).ToListAsync();
+            var filter = Builders<T>.Filter.Eq("isDraft", false);
+            return await _collection.Find(filter).ToListAsync();
         }
 
         public async Task<IEnumerable<T>> GetRecentPostAsync()

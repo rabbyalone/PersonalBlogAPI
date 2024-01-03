@@ -25,7 +25,7 @@ namespace Personal.Blog.Application.Services
         public async Task<Post> GetPostByIdAsync(ObjectId postId)
         {
             var post = await _postRepository.GetByIdAsync(postId);
-            var posts = await GetAllPostsSummary();
+            var posts = await GetAllPostsSummary(false);
             var currentPostIndex = posts.ToList().FindIndex(a => a.Id == post.Id);
             int previousIndex = currentPostIndex - 1;
             int nextIndex = currentPostIndex + 1;
@@ -58,7 +58,7 @@ namespace Personal.Blog.Application.Services
 
         public async Task<Dictionary<string, int>> GetTagsAsync()
         {
-            Expression<Func<Post, bool>> filter = u => u.Tags.Any();
+            Expression<Func<Post, bool>> filter = u => u.Tags.Any() && u.IsDraft == false;
             Expression<Func<Post, IEnumerable<string>>> listPropertySelector = u => u.Tags;
 
             var selectedTagsLists = await _postRepository.GetListProperty(listPropertySelector, filter);
@@ -79,9 +79,9 @@ namespace Personal.Blog.Application.Services
             return result;
         }
 
-        public async Task<IEnumerable<Post>> GetAllPostsSummary()
+        public async Task<IEnumerable<Post>> GetAllPostsSummary(bool isDraft)
         {
-            Expression<Func<Post, bool>> filter = f => f.IsDraft == false;
+            Expression<Func<Post, bool>> filter = f => f.IsDraft == isDraft;
 
             Expression<Func<Post, Post>> projection = doc =>
                 new Post
@@ -89,6 +89,7 @@ namespace Personal.Blog.Application.Services
                     Summary = doc.Summary,
                     Title = doc.Title,
                     Id = doc.Id,
+                    IsDraft = doc.IsDraft,
                     Tags = doc.Tags,
                     CreateDate = doc.CreateDate,
                     ModifiedDate = doc.ModifiedDate,
@@ -103,6 +104,8 @@ namespace Personal.Blog.Application.Services
             post.Id = Guid.NewGuid().ToString("N").Substring(0, 24);
             post.Tags = new List<string>(post.Tags.ConvertAll(a => a.ToLower()));
             await _postRepository.InsertAsync(post);
+
+
         }
 
         public async Task UpdatePostAsync(ObjectId postId, Post post)
