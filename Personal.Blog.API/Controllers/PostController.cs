@@ -38,7 +38,7 @@ namespace Personal.Blog.API.Controllers
 
             return Ok(cachedPosts);
         }
-
+        [Authorize]
         [HttpGet("drafts")]
         public async Task<IActionResult> GetAllDraftPosts()
         {
