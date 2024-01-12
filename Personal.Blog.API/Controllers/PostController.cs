@@ -105,7 +105,7 @@ namespace Personal.Blog.API.Controllers
         {
             post.Tags.ForEach(a => a.ToLower());
             await _postService.InsertPostAsync(post);
-            await _cacheService.CreateOrUpdateAsync($"post{post.Id}", post, TimeSpan.FromMinutes(10));
+            await _cacheService.CreateOrUpdateAsync($"post_{post.Id}", post, TimeSpan.FromMinutes(10));
             await _cacheService.DeleteAsync("all_posts");
             return CreatedAtAction(nameof(GetPostById), new { id = post.Id }, post);
         }
@@ -129,7 +129,7 @@ namespace Personal.Blog.API.Controllers
             existingPost.IsDraft = post.IsDraft;
 
             await _postService.UpdatePostAsync(postId, existingPost);
-            await _cacheService.CreateOrUpdateAsync($"post{post.Id}", post, TimeSpan.FromMinutes(10));
+            await _cacheService.CreateOrUpdateAsync($"post_{post.Id}", post, TimeSpan.FromMinutes(10));
             await _cacheService.DeleteAsync("all_posts");
             return NoContent();
         }
